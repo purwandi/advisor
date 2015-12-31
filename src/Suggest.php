@@ -2,42 +2,48 @@
 
 namespace Purwandi\Advisor;
 
-use GuzzleHttp\Client;
+use Purwandi\Advisor\Request;
 
 class Suggest
 {
+    /**
+     * The api endpoint
+     *
+     * @var string
+     */
     protected $endpoint = 'https://www.tripadvisor.co.id/TypeAheadJson';
 
-    protected $defaultParams = [
+    /**
+     * The dafault parameters request
+     *
+     * @var array
+     */
+    protected $params = [
         'action'          => 'CDS',
         'types'           => 'hotel',
         'local'           => 'true',
-        'hglt'            => false,
-        'excludeoverview' => true,
+        'hglt'            => 'false',
+        'excludeoverview' => 'true',
         'query'           => '',
     ];
 
-    public function __construct($params = [])
+    /**
+     * Make suggest class
+     */
+    public function __construct()
     {
-        $this->init($params);
+        $this->request = new Request;
     }
 
-    public function init($params = [])
-    {
-        foreach ($params as $key => $value) {
-            if (in_array($key, $this->defaultParams)) {
-                $this->defaultParams[$key] = $value;
-            }
-        }
-    }
-
+    /**
+     * Run search
+     *
+     * @param  string $query
+     * @return json
+     */
     public function search($query)
     {
-        $this->defaultParams['query'] = $query;
-
-        $request  = new Client();
-        $response = $request->get($this->endpoint . http_build_query($this->defaultParams));
-
-        return $response->getBody();
+        $this->params['query'] = $query;
+        return $this->request->get($this->endpoint, $this->params);
     }
 }
