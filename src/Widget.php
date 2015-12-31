@@ -38,6 +38,18 @@ class Widget
         // Load the response result to parsing the dom element
         $this->dom->load($response);
 
+        // Cek if trip advisor is available
+        $cek = $this->dom->find('#WIDGET_ERR_IMAGE_LINK');
+
+        if ($cek[0]) {
+            return [
+                'link'   => null,
+                'src'    => null,
+                'alt'    => null,
+                'review' => null,
+            ];
+        }
+
         // Parsing and find element
         $img    = $this->dom->find('img')[1];
         $link   = $this->dom->find('#CDSLOCINNER')[0]->getAttribute('href');
