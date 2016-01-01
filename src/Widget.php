@@ -22,7 +22,7 @@ class Widget
      * @param  int $id
      * @return array
      */
-    public function review(int $id)
+    public function review($id)
     {
         $endpoint = 'https://www.tripadvisor.com/WidgetEmbed-cdsratingsonlynarrow';
         $params   = [
