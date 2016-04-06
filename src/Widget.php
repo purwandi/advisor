@@ -2,18 +2,20 @@
 
 namespace Purwandi\Advisor;
 
-use PHPHtmlParser\Dom;
 use Purwandi\Advisor\Request;
 
 class Widget
 {
+
+    protected $key;
+
     /**
      * Create new widget api
      */
-    public function __construct()
+    public function __construct($key)
     {
         $this->request = new Request;
-        $this->dom     = new Dom;
+        $this->key     = $key;
     }
 
     /**
@@ -22,44 +24,20 @@ class Widget
      * @param  int $id
      * @return array
      */
+    public function hotel($id)
+    {
+        $endpoint = 'http://api.tripadvisor.com/api/partner/2.0/location/' . $id;
+        return $this->request->get($endpoint, ['key' => $this->key]);
+    }
+
+    /**
+     * Get review widget
+     *
+     * @param  int $id
+     * @return string
+     */
     public function review($id)
     {
-        $endpoint = 'https://www.tripadvisor.com/WidgetEmbed-cdsratingsonlynarrow';
-        $params   = [
-            'display'         => 'true',
-            'locationId'      => $id,
-            'lang'            => 'en_US',
-            'display_version' => 2,
-            'border'          => 'false',
-        ];
-
-        $response = $this->request->get($endpoint, $params);
-
-        // Load the response result to parsing the dom element
-        $this->dom->load($response);
-
-        // Cek if trip advisor is available
-        $cek = $this->dom->find('#WIDGET_ERR_IMAGE_LINK');
-
-        if ($cek[0]) {
-            return [
-                'link'   => null,
-                'src'    => null,
-                'alt'    => null,
-                'review' => null,
-            ];
-        }
-
-        // Parsing and find element
-        $img    = $this->dom->find('img')[1];
-        $link   = $this->dom->find('#CDSLOCINNER')[0]->getAttribute('href');
-        $review = $this->dom->find('span')[0]->text;
-
-        return [
-            'link'   => $link,
-            'src'    => $img->getAttribute('src'),
-            'alt'    => $img->getAttribute('alt'),
-            'review' => trim($review),
-        ];
+        return '<iframe src="https://www.tripadvisor.co.id/WidgetEmbed-cdspropertydetail?locationId=' . $id . '&lang=en&partnerId=' . $this->key . '&isTA=&format=html&display=true" width="100%" height=800 name=tripadvisor-rating scrolling=auto frameborder=no></iframe>';
     }
 }

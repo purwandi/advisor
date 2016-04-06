@@ -2,6 +2,8 @@
 
 namespace Purwandi\Advisor;
 
+use GuzzleHttp\Client;
+
 class Request
 {
     /**
@@ -89,23 +91,27 @@ class Request
      */
     public function get($url, array $data = [])
     {
-        curl_setopt($this->request, CURLOPT_URL, $url . '?' . http_build_query($data));
-        curl_setopt($this->request, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($this->request, CURLOPT_SSL_VERIFYPEER, 'true');
-        curl_setopt($this->request, CURLOPT_REFERER, $this->referer);
-        curl_setopt($this->request, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($this->request, CURLOPT_USERAGENT, $this->agents[array_rand($this->agents)]);
-        curl_setopt($this->request, CURLOPT_HTTPHEADER, $this->headers);
+        $this->client = new Client([
+            'headers' => [
+                'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Charset'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+                'Accept-Language' => 'id,en-US;q=0.8,en;q=0.6',
+                'Cache-Control'   => 'max-age=0',
+                'Connection'      => 'keep-alive',
+                'Keep-Alive'      => '300',
+                'Pragma'          => ' ',
+                'User-Agent'      => $this->agents[array_rand($this->agents)],
+            ],
+        ]);
 
-        $this->body = curl_exec($this->request);
+        $response = $this->client->request('GET', $url, [
+            'query' => $data,
+        ]);
 
-        curl_close($this->request);
-
-        if ($this->body == false) {
-            $error = curl_error($this->request);
-            throw new \Exception('Error retrieving "' . $url . '" (' . $error . ')');
+        if ($response->getStatusCode() == 200) {
+            return $response->getBody()->getContents();
         }
 
-        return $this->body;
+        return false;
     }
 }
