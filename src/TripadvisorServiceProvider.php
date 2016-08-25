@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Purwandi\Advisor;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -21,7 +21,7 @@ class TripadvisorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('tripadvisor', function ($app) {
-            return new Tripadvisor(env('TRIPADVISOR_KEY'));
+            return new Tripadvisor(env('TRIPADVISOR_KEY'), env('TRIPADVISOR_PARTNER'));
         });
     }
 

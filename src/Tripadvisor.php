@@ -7,10 +7,12 @@ use Purwandi\Advisor\Suggest;
 class Tripadvisor
 {
     protected $key;
+    protected $partner;
 
-    public function __construct($key)
+    public function __construct($key, $partner)
     {
-        $this->key = $key;
+        $this->key     = $key;
+        $this->partner = $partner;
     }
 
     public function suggest()
@@ -20,6 +22,6 @@ class Tripadvisor
 
     public function widget()
     {
-        return new Widget($this->key);
+        return new Widget($this->key, $this->partner);
     }
 }
