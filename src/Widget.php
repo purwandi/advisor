@@ -41,7 +41,7 @@ class Widget
      */
     public function summary($id)
     {
-        return '<iframe src="https://www.tripadvisor.co.id/WidgetEmbed-cdspropertysummary?locationId=' . $id . '&partnerId=' . $this->partner . '&display=true" width="100%" height=800 name=tripadvisor-rating scrolling=auto frameborder=no></iframe>';
+        return 'https://www.tripadvisor.co.id/WidgetEmbed-cdspropertysummary?locationId=' . $id . '&partnerId=' . $this->partner . '&display=true';
     }
 
     /**
@@ -52,6 +52,6 @@ class Widget
      */
     public function review($id)
     {
-        return '<iframe src="https://www.tripadvisor.co.id/WidgetEmbed-cdspropertydetail?locationId=' . $id . '&lang=en&partnerId=' . $this->partner . '&isTA=&format=html&display=true" width="100%" height=800 name=tripadvisor-rating scrolling=auto frameborder=no></iframe>';
+        return 'https://www.tripadvisor.co.id/WidgetEmbed-cdspropertydetail?locationId=' . $id . '&lang=en&partnerId=' . $this->partner . '&isTA=&format=html&display=true';
     }
 }
