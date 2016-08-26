@@ -25,10 +25,10 @@ class Widget
      * @param  int $id
      * @return array
      */
-    public function hotel($id)
+    public function hotel($id, $lang = 'en')
     {
         $endpoint = 'http://api.tripadvisor.com/api/partner/2.0/location/' . $id;
-        $response = $this->request->get($endpoint, ['key' => $this->key]);
+        $response = $this->request->get($endpoint, ['key' => $this->key, 'lang' => $lang]);
 
         return json_decode($response);
     }
